@@ -1,0 +1,31 @@
+# OGC API Features Community Connector Spec
+# Ingests geospatial vector data from OGC API Features (REST) endpoints.
+
+# ============================================================================
+# Connection Parameters
+# ============================================================================
+display_name: OGC API Features
+connection:
+  parameters:
+    - name: base_url
+      type: string
+      required: true
+      description: >
+        Base URL of the OGC API Features endpoint
+        (e.g. https://demo.ldproxy.net/vineyards).
+    - name: api_key
+      type: string
+      required: false
+      secret: true
+      description: >
+        API key for protected endpoints. Leave blank for public APIs.
+    - name: api_key_header
+      type: string
+      required: false
+      description: >
+        HTTP header name used to send the API key. Defaults to X-API-Key.
+
+# ============================================================================
+# External Options Allowlist
+# ============================================================================
+external_options_allowlist: "limit,bbox,datetime,crs"

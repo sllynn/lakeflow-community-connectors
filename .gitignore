@@ -46,3 +46,4 @@ Thumbs.db
 
 # Dev config
 tests/unit/sources/*/configs/dev_config.json
+CLAUDE_BRANCH.md
