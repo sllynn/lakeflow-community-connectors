@@ -397,6 +397,8 @@ def register_lakeflow_source(spark):
         ]
         properties = json_schema.get("properties", {})
         for name, prop in properties.items():
+            if name in ("id", "geometry"):
+                continue
             fields.append(StructField(name, _spark_type_for_json_schema(prop), nullable=True))
         return StructType(fields)
 
@@ -415,6 +417,8 @@ def register_lakeflow_source(spark):
         prop_order: list[str] = []
         for feature in features:
             for key, value in (feature.get("properties") or {}).items():
+                if key in ("id", "geometry"):
+                    continue
                 if key not in prop_types:
                     prop_order.append(key)
                     prop_types[key] = type(None)
@@ -440,6 +444,8 @@ def register_lakeflow_source(spark):
         geom = feature.get("geometry")
         record["geometry"] = json.dumps(geom) if geom is not None else None
         for key, value in (feature.get("properties") or {}).items():
+            if key in ("id", "geometry"):
+                continue
             record[key] = value
         return record
 

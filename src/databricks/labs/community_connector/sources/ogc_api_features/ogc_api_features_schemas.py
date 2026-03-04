@@ -53,6 +53,8 @@ def schema_from_json_schema(json_schema: dict) -> StructType:
     ]
     properties = json_schema.get("properties", {})
     for name, prop in properties.items():
+        if name in ("id", "geometry"):
+            continue
         fields.append(StructField(name, _spark_type_for_json_schema(prop), nullable=True))
     return StructType(fields)
 
@@ -71,6 +73,8 @@ def schema_from_features(features: list[dict]) -> StructType:
     prop_order: list[str] = []
     for feature in features:
         for key, value in (feature.get("properties") or {}).items():
+            if key in ("id", "geometry"):
+                continue
             if key not in prop_types:
                 prop_order.append(key)
                 prop_types[key] = type(None)
@@ -96,5 +100,7 @@ def flatten_feature(feature: dict) -> dict:
     geom = feature.get("geometry")
     record["geometry"] = json.dumps(geom) if geom is not None else None
     for key, value in (feature.get("properties") or {}).items():
+        if key in ("id", "geometry"):
+            continue
         record[key] = value
     return record
