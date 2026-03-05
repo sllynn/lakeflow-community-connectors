@@ -488,7 +488,11 @@ def register_lakeflow_source(spark):
             resp = self._request_with_retry(f"{self._base_url}/collections", params={"f": "json"})
             resp.raise_for_status()
             data = resp.json()
-            return [c["id"] for c in data.get("collections", [])]
+            return [
+                c["id"]
+                for c in data.get("collections", [])
+                if c.get("itemType") == "feature"
+            ]
 
         def get_table_schema(self, table_name: str, table_options: dict[str, str]) -> StructType:
             # Try the JSON Schema endpoint first
@@ -532,6 +536,10 @@ def register_lakeflow_source(spark):
             records = []
             params: dict[str, str] = {"f": "json"}
 
+            # "limit" caps the total number of records fetched and is also passed
+            # as the OGC page-size hint.  When omitted, all features are retrieved.
+            max_records = int(table_options["limit"]) if "limit" in table_options else None
+
             # Pass through supported OGC query parameters from table_options
             for key in ("limit", "bbox", "datetime", "crs"):
                 if key in table_options:
@@ -546,6 +554,8 @@ def register_lakeflow_source(spark):
 
                 for feature in body.get("features", []):
                     records.append(flatten_feature(feature))
+                    if max_records is not None and len(records) >= max_records:
+                        return iter(records), {}
 
                 # Follow HATEOAS next link
                 url = None

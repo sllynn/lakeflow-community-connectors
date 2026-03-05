@@ -1,0 +1,15 @@
+{
+  "obs": {"limit": "10"},
+  "lakes": {"limit": "10"},
+  "dutch_windmills": {"limit": "10"},
+  "dutch_castles": {"limit": "10"},
+  "dutch_georef_stations": {"limit": "10"},
+  "utah_city_locations": {"limit": "10"},
+  "unesco_pois_italy": {"limit": "10"},
+  "ogr_gpkg_poi": {"limit": "10"},
+  "ogr_geojson_lakes": {"limit": "10"},
+  "ogr_gpkg_wales_railway_lines": {"limit": "10"},
+  "ogr_gpkg_wales_stations": {"limit": "10"},
+  "ogr_addresses_sqlite": {"limit": "10"},
+  "ogr_addresses_gpkg": {"limit": "10"}
+}

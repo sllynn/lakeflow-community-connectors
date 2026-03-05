@@ -22,3 +22,20 @@ def test_ogc_api_features_connector():
     assert report.passed_tests == report.total_tests, (
         f"Test suite had failures: {report.failed_tests} failed, {report.error_tests} errors"
     )
+
+
+def test_ogc_api_features_connector_pygeoapi():
+    """Test against a pygeoapi instance (Dutch windmills, Point geometries)."""
+    config_dir = Path(__file__).parent / "configs"
+    config = load_config(config_dir / "dev_config_pygeoapi.json")
+    table_config = load_config(config_dir / "dev_table_config_pygeoapi.json")
+
+    test_suite.LakeflowConnect = OgcApiFeaturesLakeflowConnect
+
+    tester = LakeflowConnectTester(config, table_config, sample_records=5)
+    report = tester.run_all_tests()
+    tester.print_report(report, show_details=True)
+
+    assert report.passed_tests == report.total_tests, (
+        f"Test suite had failures: {report.failed_tests} failed, {report.error_tests} errors"
+    )
